@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+
+import sys
+import os 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(dir_path)
+
+print(dir_path)
+from src import train
+from src import estimate
+
+def run_program(args): 
+
+    usage = '''
+    Usage for train: ./polynomial train POLYNOMIAL_DEGREE PATH_TO_CSV
+    Usage forclassification: ./polynomial estimate X'''
+
+    try:
+        mode = args[1]
+        if mode == 'train':
+            if len(args[2:]) < 2: 
+                print(" No 'POLYNOMIAL_DEGREE' or 'PATH_TO_CSV'. Pelase look at:")
+                print(usage)
+            else:
+                train.train(args[2], args[3])
+        elif mode == 'estimate':
+            try: 
+                args[2]
+                estimate.estimate(args[2])
+            except:
+                print(" No 'X' given. Pelase look at:")
+                print(usage)
+        else:
+            print( "Wrong mode name '{}', please look at:".format(mode))
+            print(usage)
+    except IndexError:
+        print( "No mode name, please look at:")
+        print(usage)
+
+
+
+if __name__=='__main__':
+
+
+    run_program(sys.argv)
