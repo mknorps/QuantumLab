@@ -8,14 +8,6 @@ aproksymuje zadany zbiór danych.
 
 Program został napisany w Python3.6 z użyciem bibliotek Numpy (v. 1.14.2).
 
-Uruchamianie:
-
-W modzie traningowym:
-./polynomial train POLYNOMIAL_DEGREE PATH_TO_CSV
-
-Estymacja wielomianem w punkcie:
-./polynomial estimate X
-
 Struktura projektu:
 ...
 
@@ -25,3 +17,13 @@ Możliwości sieci:
 Założenia:
 ...
 
+Uruchamianie:
+
+W modzie traningowym:
+./polynomial train POLYNOMIAL_DEGREE PATH_TO_CSV
+
+Estymacja wielomianem w punkcie:
+./polynomial estimate X
+
+Testy:
+python -m unittest discover
