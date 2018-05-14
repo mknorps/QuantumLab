@@ -2,10 +2,12 @@
 
 import sys
 import os 
+
+# get current directory
 dir_path = os.path.dirname(os.path.realpath(__file__))
+# append src module to inport paths
 sys.path.append(dir_path)
 
-print(dir_path)
 from src import train
 from src import estimate
 
