@@ -44,14 +44,17 @@ def feature_scaling(data,n):
     features - array of normalised features
     '''
     m = len(data)
-    features = [] 
-    x_rescaled = _normalise_array(data[:,0])
+    features = [np.ones(m)] #x0
+    if n>0:
+        features.append(_normalise_array(data[:,0])) #x1
+        for i in range(n-1):
+            # take last feature and rescale it
+            x_i_plus_1 = [x**(i+2) for x in features[-1]]
+            features.append( _normalise_array(x_i_plus_1)) 
+        
     y_rescaled = _normalise_array(data[:,1])
 
-    for i in range(n):
-        features.append([x**(i+1) for x in x_rescaled])
-
     features.append(y_rescaled)
-    features = np.array(features).reshape((m,n+1))
+    features = np.array(features).T
 
     return features
