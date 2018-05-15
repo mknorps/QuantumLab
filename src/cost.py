@@ -3,15 +3,16 @@ Definitions of cost functions
 
 Input
 -----
-h_x - array of hypothesis function, here linear 
+h_x - array of hypothesis representation function, 
     (features: x_0=1, x_1=x, x_2=x^2,..., x_n=x^n)
-    for array of features (x_0,x_1,x_2,...x_n)
-    for 
 y - array of observed values
 
 '''
 
 import numpy as np
+
+
+
 
 def J_l2_norm(h_x,y):
     '''

@@ -28,6 +28,42 @@ def _normalise_array(a):
     return normalised
 
 
+def split_data(data,train=0.8, test=0.2):
+    '''
+    randomly split data into training, test and validation sets
+
+    Input
+    -----
+    data  - array of data of shape (m,2), where m is a number of samples
+    train - fraction of data that will be used for training
+    test  - fraction of data that will be used for evaluating the model
+
+    Output
+    ------
+    splited_data - dictionary of splited data
+    '''
+    np.random.seed(42) #for reproducability
+    np.random.shuffle(data)
+    l = len(data)
+    splited_data = {"train":[], 'test':[], 'valid':[]}
+
+    if l == 0:
+        return splited_data
+
+    l_train = int(train*l)
+    l_test = int(test*l)
+
+    assert (l_train+l_test <= l)
+    # the remamining data points are used for validation
+    l_valid = l - l_train - l_test
+
+
+    splited_data['train'] = data[:l_train,:] 
+    splited_data['test']  = data[l_train:l_train+l_test,:] 
+    splited_data['valid']  = data[l_train+l_test:,:] 
+
+    return splited_data
+
 
 def feature_scaling(data,n):
     '''

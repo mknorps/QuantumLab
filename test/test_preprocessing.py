@@ -89,5 +89,31 @@ class FeatureScalingTests(unittest.TestCase):
         self.assertAlmostEqual(std_x3,1)
         self.assertAlmostEqual(std_y,1)
 
+class DataSplitTests(unittest.TestCase):
+
+    def test_empty(self):
+        a = pre.split_data([])
+        self.assertDictEqual(a, {'test':[], 'train':[], 'valid':[]})
+
+    def test_split(self):
+        a = pre.split_data(np.random.rand(100,2))
+        self.assertEqual(len(a['test']),20)
+        self.assertEqual(len(a['train']),80)
+        self.assertEqual(len(a['valid']),0)
+
+    def test_reproducability(self):
+        a = np.random.rand(100,2)
+        b = pre.split_data(a)
+        c = pre.split_data(a)
+        for key in b.keys():
+            try:
+                np.testing.assert_array_equal(c[key], b[key])
+                res=True
+            except AssertionError:
+                print("{} in not equal to {} for {}".format(c[key], b[key],key))
+                res=False
+            self.assertTrue(res)
+
+
 if __name__=='__main__':
     unittest.main()
