@@ -1,4 +1,4 @@
-Zadanie dla AI Developera
+# Zadanie dla AI Developera
 
 
 Mając zadany zbiór danych w postaci CSV (dane punktów dwuwymiarowych w postaci
@@ -8,16 +8,33 @@ aproksymuje zadany zbiór danych.
 
 Program został napisany w Python3.6 z użyciem bibliotek Numpy (v. 1.14.2).
 
-Struktura projektu:
+## Struktura projektu:
+```
+  ├── DATA
+  │   └── marie-knorps.csv
+  ├── polynomial
+  ├── README.md
+  ├── simple_nn.py
+  ├── src
+  │   ├── EDA.ipynb
+  │   ├── estimate.py
+  │   ├── __init__.py
+  │   ├── preprocessing.py
+  │   ├── __pycache__
+  │   └── train.py
+  ├── test
+  │   ├── __init__.py
+  │   ├── __pycache__
+  │   └── test_preprocessing.py
+  └── zadanie.pdf
+```
+## Możliwości sieci:
 ...
 
-Możliwości sieci:
+## Założenia:
 ...
 
-Założenia:
-...
-
-Uruchamianie:
+## Uruchamianie:
 
 W modzie traningowym:
 ./polynomial train POLYNOMIAL_DEGREE PATH_TO_CSV
@@ -25,5 +42,6 @@ W modzie traningowym:
 Estymacja wielomianem w punkcie:
 ./polynomial estimate X
 
-Testy:
+Testy jednostkowe:
+cd folder_projektu
 python -m unittest discover
