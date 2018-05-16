@@ -78,6 +78,7 @@ def feature_scaling(data,n):
     Output
     ------
     features - array of normalised features
+    values   - array of values
     '''
     m = len(data)
     features = [np.ones(m)] #x0
@@ -88,9 +89,6 @@ def feature_scaling(data,n):
             x_i_plus_1 = [x**(i+2) for x in features[-1]]
             features.append( _normalise_array(x_i_plus_1)) 
         
-    y_rescaled = _normalise_array(data[:,1])
-
-    features.append(y_rescaled)
     features = np.array(features).T
 
-    return features
+    return [features, data[:,1]]

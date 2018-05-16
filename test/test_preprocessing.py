@@ -34,8 +34,8 @@ class FeatureScalingTests(unittest.TestCase):
 
     def test_constant(self):
         a = np.zeros((10,2))
-        a_rescaled = pre.feature_scaling(a,1)
-        b = [[1] + list(i) for i in a]
+        a_rescaled,y = pre.feature_scaling(a,1)
+        b = np.array([np.ones(10), a[:,0]]).T
         try:
             np.testing.assert_array_equal(b,a_rescaled)
             res=True
@@ -46,8 +46,8 @@ class FeatureScalingTests(unittest.TestCase):
 
     def test_0(self):
         a = np.array([[4,0],[0,2]])
-        a_rescaled = pre.feature_scaling(a,0)
-        b = np.array([[1,-1],[1,1]])
+        a_rescaled,y = pre.feature_scaling(a,0)
+        b = np.array([[1],[1]])
         try:
             np.testing.assert_array_equal(a_rescaled, b)
             res=True
@@ -58,8 +58,8 @@ class FeatureScalingTests(unittest.TestCase):
 
     def test_1(self):
         a = np.array([[4,0],[0,2]])
-        a_rescaled = pre.feature_scaling(a,1)
-        b = np.array([[1,1,-1],[1,-1,1]])
+        a_rescaled,y = pre.feature_scaling(a,1)
+        b = np.array([[1,1],[1,-1]])
         try:
             np.testing.assert_array_equal(a_rescaled, b)
             res=True
@@ -71,23 +71,19 @@ class FeatureScalingTests(unittest.TestCase):
 
     def test_normalisation_0(self):
         a = 100*np.random.rand(100,2)
-        a_rescaled = pre.feature_scaling(a,0)
-        std_x1 = np.std(a_rescaled[:,1])
-        std_y = np.std(a_rescaled[:,-1])
-        self.assertAlmostEqual(std_x1,1)
-        self.assertAlmostEqual(std_y,1)
+        a_rescaled,y = pre.feature_scaling(a,0)
+        std_x1 = np.std(a_rescaled[:,0])
+        self.assertAlmostEqual(std_x1,0)
 
     def test_normalisation_3(self):
         a = 10000* np.random.rand(100,2)
-        a_rescaled = pre.feature_scaling(a,3)
+        a_rescaled,y = pre.feature_scaling(a,3)
         std_x1 = np.std(a_rescaled[:,1])
         std_x2 = np.std(a_rescaled[:,2])
         std_x3 = np.std(a_rescaled[:,3])
-        std_y = np.std(a_rescaled[:,-1])
         self.assertAlmostEqual(std_x1,1)
         self.assertAlmostEqual(std_x2,1)
         self.assertAlmostEqual(std_x3,1)
-        self.assertAlmostEqual(std_y,1)
 
 class DataSplitTests(unittest.TestCase):
 

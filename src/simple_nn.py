@@ -9,39 +9,73 @@ class SimpleNN():
     with one hidden layer
     '''
 
-    def __init__(self,n):
-        # number of cells in hidden layer
+    def __init__(self,n,nn, init_random=False):
+        # order of polynomial (number of nodes in input layer-1)
         self.n = n
-        # activation matrix
-        self.a = np.empty(n) 
+        # number of cells in hidden layer
+        self.nn = nn
+        # activation matrix - hidden layer
+        self.A = np.empty(nn) 
         # weights matrix
-        self.w = np.empty([n,n+1])
+        self.W1 = np.empty([nn,n+1])
+        self.W2 = np.empty(nn+1) #+1 for bias node
 
-    def _initialize_a(n):
+        if init_random:
+            self.A = _initialize_A(self) 
+            self.W1 =_initialize_W1(self) 
+            self.W2 =_initialize_W2(self) 
 
-        init_a = np.random.rand(n) 
+        # output
+        self.h = 0
+
+
+    def _initialize_A(self):
+        init_a = np.random.rand(self.n) 
         return init_a
 
-    def _initialize_w(n):
-        init_w = np.random.rand([n+1,n]) 
+    def _initialize_W1(self):
+        init_w = np.random.rand([self.nn,self.n+1]) 
         return init_w
 
-    def compute_activation(self, sample, act_function=sigmoid):
+    def _initialize_W2(self):
+        init_w = np.random.rand(self.n+1) 
+        return init_w
+
+    def forward_propagate(self,sample,act_function=lambda x:x):
         '''
         compute activation value of cells in hidden layer
+        for one sample vector of input data (x0,x1,...xn)
 
         Input
         -----
         sample - one samples with features (x0,x1,x2,...,xn)
+        act_function - activation function
 
         '''
+        # polynomial
+        W1_times_sample = np.matmul(self.W1, sample)
+        # hidden layer
+        self.A =[ act_function(val) for val in  W1_times_sample]
+        # output
+        A_with_bias = np.append([1],self.A)
+        self.h = act_function(np.matmul(self.W2,A_with_bias))
 
-        self.a = [act_function(np.matmul(self.w[i,:], sample) ) for i in range(n)]
+    def back_propagate(self):
+        pass
+
+
+    def compute_poly_coeffs(self):
+        '''
+        compute resulting polynomial coefficients
+        '''
+        coeffs = [ np.matmul(self.W1[:,i], self.W2)for i in range(self.n+1)]
+        return coeffs
 
 
     def train():
-
         pass
 
     def test():
+        pass
+
 
