@@ -3,12 +3,12 @@ import os
 import csv
 
 
-def read_data():
+def read_data(path_to_csv):
     '''
     read dataset from CSV to numpy array
     '''
-    dir_path = os.getcwd()
-    points = np.genfromtxt(dir_path+ "/../DATA/marie-knorps.csv", delimiter=',')
+    # TODO userproof
+    points = np.genfromtxt(path_to_csv, delimiter=',')
 
     return points
 
@@ -89,6 +89,7 @@ def feature_scaling(data,n):
             x_i_plus_1 = [x**(i+2) for x in features[-1]]
             features.append( _normalise_array(x_i_plus_1)) 
         
+    features.append(data[:,1])    
     features = np.array(features).T
 
-    return [features, data[:,1]]
+    return features

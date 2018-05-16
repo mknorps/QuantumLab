@@ -24,7 +24,7 @@ def run_program(args):
                 print(" No 'POLYNOMIAL_DEGREE' or 'PATH_TO_CSV'. Pelase look at:")
                 print(usage)
             else:
-                train.train(args[2], args[3])
+                train.train(int(args[2]), args[3])
         elif mode == 'estimate':
             try: 
                 args[2]

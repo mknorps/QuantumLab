@@ -28,6 +28,25 @@ class SimpleNN():
         # output
         self.h = 0
 
+    def __repr__(self):
+        '''
+        String representation of SimpleNN object
+        '''
+        representation = '''
+order of polynomial, n: {}
+number of cells in hidden layer, nn: {}
+activation matrix, A:
+{}
+weight matrix, W1:
+{}
+weight matrix, W2:
+{}
+output, h: {}
+        '''.format(self.n,self.nn,self.A,self.W1,self.W2,self.h)
+
+        return representation
+
+
 
     def _initialize_A(self):
         init_a = np.random.rand(self.n) 
@@ -41,7 +60,7 @@ class SimpleNN():
         init_w = np.random.rand(self.n+1) 
         return init_w
 
-    def forward_propagate(self,sample,act_function=lambda x:x):
+    def forward_propagate(self,sample,act_function=sigmoid):
         '''
         compute activation value of cells in hidden layer
         for one sample vector of input data (x0,x1,...xn)
@@ -68,14 +87,14 @@ class SimpleNN():
         '''
         compute resulting polynomial coefficients
         '''
-        coeffs = [ np.matmul(self.W1[:,i], self.W2)for i in range(self.n+1)]
+        coeffs = []
         return coeffs
 
 
-    def train():
+    def train(self):
         pass
 
-    def test():
+    def test(self):
         pass
 
 

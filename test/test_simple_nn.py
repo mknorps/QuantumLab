@@ -21,7 +21,7 @@ class SimpleNNTests(unittest.TestCase):
         a = nn.SimpleNN(2,2)
         a.W1 = np.ones([2,3])
         a.W2 = np.ones(3)
-        a.forward_propagate(sample)
+        a.forward_propagate(sample, lambda x:x)
         try:
             np.testing.assert_array_equal(a.A, [3,3])
             res=True
@@ -34,7 +34,7 @@ class SimpleNNTests(unittest.TestCase):
         sample = np.array([1,1,1]) # for 2nd order polynomial
         a = nn.SimpleNN(2,2)
         a.W1 = np.zeros([2,3])
-        a.forward_propagate(sample, lambda x: 1/(1+np.exp(-x)))
+        a.forward_propagate(sample)
         try:
             np.testing.assert_array_equal(a.A, [0.5,0.5])
             res=True
