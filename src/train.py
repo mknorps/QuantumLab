@@ -1,6 +1,6 @@
 import numpy as np
 from src import preprocessing as pre
-from src import simple_nn as snn
+from src import inout_nn as ionn
 import pickle 
 
 def train(n, path_to_csv):
@@ -26,14 +26,16 @@ def train(n, path_to_csv):
     # create instance of the neural network
     #-------------------------------------------------
     nn = n*2
-    model = snn.SimpleNN(n, nn)
+    model = ionn.InOutNN(n, nn)
     print(model)
 
 
     # train the model 
     #-------------------------------------------------
-    model.train()
-
+    poly_coeffs = model.train(data['train'][:,:-1], data['train'][:,-1])
+    print(poly_coeffs)
+    print(np.polyfit(data['train'][:,1], data['train'][:,-1], deg=n))
+    
 
     # test the model 
     #-------------------------------------------------
@@ -46,10 +48,5 @@ def train(n, path_to_csv):
     with open(model_file,'wb') as f:
         pickle.dump(model, f)
 
-
-    # compute polynomial coefficient
-    #-------------------------------------------------
-    poly_coeffs = model.compute_poly_coeffs()
-    print(poly_coeffs)
 
     return poly_coeffs

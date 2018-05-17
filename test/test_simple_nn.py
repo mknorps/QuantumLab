@@ -45,13 +45,6 @@ class SimpleNNTests(unittest.TestCase):
         self.assertTrue(res)
         self.assertEqual(result,0.5)
 
-    def test_cost_nn(self):
-        data = np.array([[1,2],[1,2], [1,2]]) # for 2nd order polynomial
-        a = nn.SimpleNN(2,2)
-        a.W1 = np.zeros([2,3])
-        a.W2 = np.array([1,0,0])
-        cost = a.cost_nn(data,[1,1])
-        self.assertEqual(cost,0)
 
 if __name__=='__main__':
     unittest.main()
