@@ -33,8 +33,9 @@ def train(n, path_to_csv):
     # train the model 
     #-------------------------------------------------
     poly_coeffs = model.train(data['train'][:,:-1], data['train'][:,-1])
+
     print(poly_coeffs)
-    print(np.polyfit(data['train'][:,1], data['train'][:,-1], deg=n))
+    print(np.polyfit(data['train'][:,1], data['train'][:,-1], deg=n, full = True))
     
 
     # test the model 

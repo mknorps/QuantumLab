@@ -80,20 +80,38 @@ class InOutNNCostTests(unittest.TestCase):
         cost,_ = a.cost(sample,np.array([0,0,0]).T)
         self.assertEqual(cost,29/6)
 
+    def test_dcost_constant(self):
+        # y = 300
+        sample = np.array([np.ones(10000)]).T # for 1st  order polynomial
+        y = 300*np.ones(10000) 
+        a = nn.InOutNN(0)
+        a.W1=np.array([1000])
+        cost,dcost = a.cost(sample,y)
+        self.assertEqual(dcost, np.array([700]))
+        self.assertEqual(cost, 245000)
 
 class InOutNNGradientDescentTests(unittest.TestCase):
 
+    def test_gradient_descent_constant(self):
+        # y = 300
+        sample = np.array([np.ones(10000)]).T # for 1st  order polynomial
+        y = 300*np.ones(10000) 
+        a = nn.InOutNN(0, init_random=True)
+        a.W1=np.array([1000])
+        a.gradient_descent(sample,y, alpha=0.7, tol=0.0000001 )
+        self.assertAlmostEqual(a.W1[0], 300, places=3)
+
     def test_gradient_descent_linear(self):
-        # y = 2x + 3
+        # y = 2000*x - 300
         sample = np.array([np.ones(10000), np.random.rand(10000)]).T # for 1st  order polynomial
-        y = np.array([2*x+3 for x in sample[:,1]])
+        y = np.array([2000*x+300 for x in sample[:,1]])
         a = nn.InOutNN(1, init_random=True)
-        a.gradient_descent(sample,y)
+        a.gradient_descent(sample,y, alpha=1)
         try:
-            np.testing.assert_array_equal(a.W1, [3,2])
+            np.testing.assert_array_equal(a.W1, [300,2000])
             res=True
         except AssertionError:
-            print("{} in not equal to {}".format(a.W1, [3,2]))
+            print("{} in not equal to {}".format(a.W1, [300,2000]))
             res=False
         self.assertTrue(res)
 

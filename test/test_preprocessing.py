@@ -9,24 +9,24 @@ class NormaliseArrayTests(unittest.TestCase):
 
     def test_constant(self):
         a = list(np.zeros(10))
-        a_norm = list(pre._normalise_array(a))
+        a_norm = list(pre._normalise_array(a)[0])
         self.assertListEqual(a,a_norm)
 
     def test_ones(self):
         a = list(np.ones(10))
-        a_norm = list(pre._normalise_array(a))
+        a_norm = list(pre._normalise_array(a)[0])
         b = list(np.zeros(10))
         self.assertListEqual(a_norm,b)
 
     def test_mean(self):
         a = [2,0]
-        a_norm = list(pre._normalise_array(a))
+        a_norm = list(pre._normalise_array(a)[0])
         b = [1,-1]
         self.assertListEqual(a_norm,b)
 
     def test_std(self):
         a = [4,0]
-        a_norm = list(pre._normalise_array(a))
+        a_norm = list(pre._normalise_array(a)[0])
         b = [1,-1]
         self.assertListEqual(a_norm,b)
 

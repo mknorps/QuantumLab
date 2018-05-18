@@ -25,7 +25,7 @@ def _normalise_array(a):
     if std>0.0:
         normalised = normalised/std
 
-    return normalised
+    return (normalised, mean, std)
 
 
 def split_data(data,train=0.8, test=0.2):
@@ -78,16 +78,18 @@ def feature_scaling(data,n):
     Output
     ------
     features - array of normalised features
-    values   - array of values
+    scales   - array of scaling values
     '''
     m = len(data)
     features = [np.ones(m)] #x0
     if n>0:
-        features.append(_normalise_array(data[:,0])) #x1
+        norm, mean, std = _normalise_array(data[:,0])
+        features.append(norm) #x1
         for i in range(n-1):
             # take last feature and rescale it
             x_i_plus_1 = [x**(i+2) for x in features[-1]]
-            features.append( _normalise_array(x_i_plus_1)) 
+            norm, mean, std = _normalise_array(x_i_plus_1)
+            features.append( norm) 
         
     features.append(data[:,1])    
     features = np.array(features).T

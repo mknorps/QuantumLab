@@ -65,12 +65,12 @@ weight matrix, W1:
         l = len(y)
 
         cost = np.sum((h_x-y)**2)/(2*l) + lam*np.sum(self.W1**2)/(2*l)
-        dcost = np.array([np.sum( np.sum(h_x-y)*input_data[:,i] )/l 
+        dcost = np.array([np.sum( np.multiply((h_x-y),input_data[:,i]) )/l 
             + lam*self.W1[i]/l for i in range(self.n+1)])
 
         return (cost, dcost)
 
-    def gradient_descent(self, input_data, y, alpha=0.00001, tol=0.0001):
+    def gradient_descent(self, input_data, y, alpha=1, tol=0.0001):
         '''
         compute gradient descent for minimalisation of self.cost function
         
@@ -85,7 +85,7 @@ weight matrix, W1:
         self.W1  - optimized vectore
         '''
         theta = self.W1
-        imax=50
+        imax=200
 
         # regularisation parameter
         #lam = 0.01*len(y)/alpha
@@ -99,8 +99,12 @@ weight matrix, W1:
             i = i+1
             theta_old = self.W1
             cost, dcost = self.cost(input_data ,y, lam=lam)
-            print("cost: ",cost, self.W1)
+            print("cost: ",cost, self.W1, dcost)
             self.W1= self.W1 - alpha * dcost
+            # jumping from the wrong minimum
+            #if np.abs(cost_prev-cost)<tol:
+            #    self.W1 = self.W1*(0.01*np.random.rand(1)+1)
+
             cost_prev = cost
             if cost< tol:
                 convergence_condition = True    
