@@ -49,26 +49,26 @@ python -m unittest discover
 
 W programie zastosowano jako model prostą sztuczną sieć neuronową. Sieć składa się z dwóch warstw - wejściowej, składającej się z $n+1$ elementów (n - stopień wielomianu aproksymującego) i wyjściowej składającej się z jednego neuronu z liniową funkcją aktywacji. Taka architektura jest równoważna regresji liniowej dla funkcji liniowej wielu zmiennych. <br>
 
-Przygotowanie danych:<br>
+### Przygotowanie danych:<br>
 Dane są dzielone na część treningową i testową (możliwe również dodanie walidacyjnej). Test nie jest obecnie wypisywany. Zwraca wartości funkcji kosztu dla zbioru testowego i treningowego.<br>
 Dodawane są do danych nowe kolumny, w których snajdują się kolejne potęgi wektora x: [1,x,x^2,..., x^n] <br>
 Kolumny są normalizowane (x_i - mean)/std w celu lepszej zbieżności metody gradientu prostego użzytej do znalezienia wag sieci.
 
-Funkcja błędu:<br>
+### Funkcja błędu:<br>
 norma l2 z możliwością rozszerzenia o regularyzację 
 
-Metoda wyboru współczynników optymalnych:<br>
+### Metoda wyboru współczynników optymalnych:<br>
 gradient descent z warunkiem stopu różnicą kolejnych wartości funkcji kosztu: <br>
 '''convergence_condition = np.abs(cost_prev-cost)< tol''',
 z dodatkowym zabezpieczeniem liczbą iteracji "itmax" i sprawdzeniem czy funkcja kosztu nie wzrasta. 
 
 
-Zwracanie współczynników: <br>
+### Zwracanie współczynników: <br>
 Dane wejściowe zostały przeskalowane, to oznacza, że wyliczone przez sieć współczynniki również powinny zostać przeskalowane.<br>
 $\sum_{i=0}^{n}\theta_i* (x_i - mean_i)/std_i = \sum_{i=0}^{n}theta_i/std_i*x_i - \sum_{i=0}^{n}\theta_i* mean_i/std_i $
 
 ## Możliwości sieci:
-Sieć została przetestowana dla $n = 0,..,10$. Do $n=8$ daje wyniki podobne do funkcji '''polyfit''' z biblioteki numpy, natomiast dla $n>=8$ przy standardowych ustawieniach metody gradientu prostego nie jest zbieżna. Należy wtedy zmienić szybkość uczenia metody gradientu.
+Sieć została przetestowana dla n = 0,..,10 . Do ![](https://latex.codecogs.com/svg.latex?n=8) daje wyniki podobne do funkcji '''polyfit''' z biblioteki numpy, natomiast dla ![](https://latex.codecogs.com/svg.latex?n>8) przy standardowych ustawieniach metody gradientu prostego nie jest zbieżna. Należy wtedy zmienić szybkość uczenia metody gradientu.
 
 
 ## Zgodność z wymaganiami:
