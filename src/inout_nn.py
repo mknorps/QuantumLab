@@ -1,5 +1,21 @@
 import numpy as np
 
+
+def my_polyfit(points):
+    '''
+    fits polynomial of order n through n+1 points
+    (the fit is unique)
+    by solving linear matrix equation
+    y = Wx  => W = yx^(-1)
+    '''
+    n = len(points)
+    coeffs = np.empty(n+1)
+    y = np.array(points[:,1])
+    x = np.array([points[:,0]**i for i in  range(n)])
+    x_inv = np.linalg.inv(x)
+    W = np.matmul(y,x_inv)
+    return W
+
 class InOutNN():
     '''
     simple neural network class
@@ -11,10 +27,11 @@ class InOutNN():
         # order of polynomial (number of nodes in input layer-1)
         self.n = n
         # weights matrix
+        # [1,x,x^2,...,x^n]
         self.W1 = np.empty(n+1)
 
         # scaling
-        self.scaling = np.empty(n+1)
+        self.scaling = np.ones(n+1)
 
         if init_random:
             self.W1 =self._initialize_W1() 
@@ -32,22 +49,39 @@ class InOutNN():
 order of polynomial, n: {}
 weight matrix, W1:
 {}
-        '''.format(self.n,self.W1)
+scaling of input:
+{}
+        '''.format(self.n,self.W1, self.scaling)
         return representation
 
     def forward_propagate(self,sample):
         '''
-        compute output
+        compute net value
         for one sample vector of input data (x0,x1,...xn)
 
         Input
         -----
         sample - one samples with features (x0,x1,x2,...,xn)
-        act_function - activation function
 
         '''
         # polynomial
         W1_times_sample = np.matmul(self.W1, sample)
+        return W1_times_sample
+
+    def forward_propagate_rescaled(self,sample):
+        '''
+        compute net value
+        for one sample vector of input data (x0,x1,...xn)
+
+        Input
+        -----
+        sample - one samples with features (x0,x1,x2,...,xn)
+
+        '''
+        # polynomial
+        coefficients = self.scaling
+        coefficients[0] = coefficients[0]+self.W1[0]
+        W1_times_sample = np.matmul(coefficients, sample)
         return W1_times_sample
 
     def cost(self,input_data ,y, lam=0.0):
@@ -106,14 +140,15 @@ weight matrix, W1:
             cost, dcost = self.cost(input_data ,y, lam=lam)
             if verbose:
                 print(i,"cost: ",cost, self.W1, dcost)
+
             self.W1= self.W1 - alpha * dcost
-            # jumping from the wrong minimum
-            #if np.abs(cost_prev-cost)<tol:
-            #    self.W1 = self.W1*(0.01*np.random.rand(1)+1)
+            if (cost>cost_prev and i>1):
+                print("cost is growing: {}, {} - the method will not converge".format(cost, cost_prev))
+                break
+            if np.abs(cost_prev-cost)< tol:
+                convergence_condition = True    
 
             cost_prev = cost
-            if cost< tol:
-                convergence_condition = True    
 
 
 
@@ -134,12 +169,31 @@ weight matrix, W1:
         return poly_coeffs
 
     def train(self, data, y, alpha=1.01, tol=0.0001, itmax=400, verbose=True):
-
+        '''
+        train the network/regression model to fit polynomial coefficient
+        '''
         self.gradient_descent(data,y, alpha, tol, itmax, verbose)
 
         return np.flip(self.W1, 0)
 
-    def test(self):
-        pass
+    def test(self, data_train, y_train, data_test, y_test):
+        '''
+        test if the model works well on the data it was not trained on
+
+        Input
+        -----
+        data_train - training set: features
+        y_train - training set: values
+        data_test - testing set: features
+        y_test - testing set: values
+
+        Output
+        ------
+        cost_train - cost function on training set
+        cost_test - cost function on testing set
+        '''
+        cost_train, _ = self.cost(data_train ,y_train)
+        cost_test, _ = self.cost(data_test ,y_test)
+        return cost_train, cost_test
 
 

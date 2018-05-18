@@ -21,17 +21,18 @@ def run_program(args):
         mode = args[1]
         if mode == 'train':
             if len(args[2:]) < 2: 
-                print(" No 'POLYNOMIAL_DEGREE' or 'PATH_TO_CSV'. Pelase look at:")
+                print(" No 'POLYNOMIAL_DEGREE' or 'PATH_TO_CSV'. Please look at:")
                 print(usage)
             else:
                 train.train(int(args[2]), args[3])
         elif mode == 'estimate':
             try: 
                 args[2]
-                estimate.estimate(args[2])
             except:
-                print(" No 'X' given. Pelase look at:")
+                print(" No 'X' given. Please look at:")
                 print(usage)
+                return
+            estimate.estimate(float(args[2]))
         else:
             print( "Wrong mode name '{}', please look at:".format(mode))
             print(usage)

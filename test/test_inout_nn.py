@@ -4,7 +4,37 @@ import numpy as np
 from src import inout_nn as nn
  
 
+class InOutNNMyPolyfitTests(unittest.TestCase):
 
+    def test_polyfit(self):
+        fit = nn.my_polyfit(np.array([[1,1],[0,0]]))
+        try:
+            np.testing.assert_array_equal(fit, np.array([0,1]))
+            res=True
+        except AssertionError:
+            print("{} in not equal to {}".format(fit, np.array([0,1])))
+            res=False
+        self.assertTrue(res)
+
+    def test_polyfit_quadratic(self):
+        fit = nn.my_polyfit(np.array([[1,1],[0,0],[-1,1]]))
+        try:
+            np.testing.assert_array_equal(fit, np.array([0,0,1]))
+            res=True
+        except AssertionError:
+            print("{} in not equal to {}".format(fit, np.array([0,0,1])))
+            res=False
+        self.assertTrue(res)
+
+    def test_polyfit_3rd(self):
+        fit = nn.my_polyfit(np.array([[1,2],[0,1],[-1,0],[2,9]]))
+        try:
+            np.testing.assert_array_equal(fit, np.array([1,0,0,1]))
+            res=True
+        except AssertionError:
+            print("{} in not equal to {}".format(fit, np.array([1,0,0,1])))
+            res=False
+        self.assertTrue(res)
 
 class InOutNNTests(unittest.TestCase):
 
@@ -89,7 +119,7 @@ class InOutNNCostTests(unittest.TestCase):
         cost,dcost = a.cost(sample,y)
         self.assertEqual(dcost, np.array([700]))
         self.assertEqual(cost, 245000)
-
+'''
 class InOutNNGradientDescentTests(unittest.TestCase):
 
     def test_gradient_descent_constant(self):
@@ -136,7 +166,7 @@ class InOutNNGradientDescentTests(unittest.TestCase):
         sample = np.array([np.ones(10000), random, random**2]).T # for 2nd  order polynomial
         y = np.array([2*x**2 -545*x +300 for x in sample[:,1]])
         a = nn.InOutNN(2, init_random=True)
-        a.gradient_descent(sample,y, alpha=1.3, itmax = 2500, tol=0.000001)
+        a.gradient_descent(sample,y, alpha=1.3, itmax = 2500, tol=0.000001, verbose=False)
         try:
             np.testing.assert_array_almost_equal(a.W1, [300,-545,2], decimal=1)
             res=True
@@ -144,5 +174,8 @@ class InOutNNGradientDescentTests(unittest.TestCase):
             print("{} in not equal to {}".format(a.W1, [300,-545,2]))
             res=False
         self.assertTrue(res)
+
+'''        
+
 if __name__=='__main__':
     unittest.main()
