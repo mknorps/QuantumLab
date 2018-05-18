@@ -13,6 +13,9 @@ class InOutNN():
         # weights matrix
         self.W1 = np.empty(n+1)
 
+        # scaling
+        self.scaling = np.empty(n+1)
+
         if init_random:
             self.W1 =self._initialize_W1() 
 
@@ -70,7 +73,7 @@ weight matrix, W1:
 
         return (cost, dcost)
 
-    def gradient_descent(self, input_data, y, alpha=1, tol=0.0001):
+    def gradient_descent(self, input_data, y, alpha=1, tol=0.0001, itmax=100, verbose=True):
         '''
         compute gradient descent for minimalisation of self.cost function
         
@@ -79,13 +82,15 @@ weight matrix, W1:
         input_data - data against which theta is optimized
         y          - values of observations
         alpha      - learning rate of gradient descent
+        tol        - tolerance: the boundary for the difference 
+                     between cost function in two consecutive iterations 
+        itmax      - maximum number of iterations
 
         Output
         ------
         self.W1  - optimized vectore
         '''
         theta = self.W1
-        imax=200
 
         # regularisation parameter
         #lam = 0.01*len(y)/alpha
@@ -95,11 +100,12 @@ weight matrix, W1:
         i = 0
         cost_prev =0 
 
-        while (not (convergence_condition) and i<imax):
+        while (not (convergence_condition) and i<itmax):
             i = i+1
             theta_old = self.W1
             cost, dcost = self.cost(input_data ,y, lam=lam)
-            print("cost: ",cost, self.W1, dcost)
+            if verbose:
+                print(i,"cost: ",cost, self.W1, dcost)
             self.W1= self.W1 - alpha * dcost
             # jumping from the wrong minimum
             #if np.abs(cost_prev-cost)<tol:
@@ -115,9 +121,21 @@ weight matrix, W1:
         # gradient descent is enough
         pass
 
-    def train(self, data, y):
+    def polynomial_coefficients(self, means, stds):
 
-        self.gradient_descent(data,y)
+
+        theta_new = np.divide(self.W1[1:], stds[1:])
+        free_term = - np.sum(theta_new * means[1:])
+        scaling = np.insert(theta_new, 0,free_term)
+        
+        self.scaling = scaling
+        poly_coeffs = np.insert(scaling[1:], 0, self.W1[0]+free_term)
+
+        return poly_coeffs
+
+    def train(self, data, y, alpha=1.01, tol=0.0001, itmax=400, verbose=True):
+
+        self.gradient_descent(data,y, alpha, tol, itmax, verbose)
 
         return np.flip(self.W1, 0)
 

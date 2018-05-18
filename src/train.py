@@ -17,25 +17,24 @@ def train(n, path_to_csv):
     # prepare data
     #-------------------------------------------------
     raw_data = pre.read_data(path_to_csv)
-    feature_data = pre.feature_scaling(raw_data,n)
+    feature_data, means,stds = pre.feature_scaling(raw_data,n)
     data = pre.split_data(feature_data)
-
-    print([(k,len(v)) for k,v in data.items()])
 
 
     # create instance of the neural network
     #-------------------------------------------------
     nn = n*2
-    model = ionn.InOutNN(n, nn)
-    print(model)
+    model = ionn.InOutNN(n, init_random=True)
+    model.polynomial_coefficients(means, stds)
 
 
     # train the model 
     #-------------------------------------------------
-    poly_coeffs = model.train(data['train'][:,:-1], data['train'][:,-1])
+    model.train(data['train'][:,:-1], data['train'][:,-1], itmax=1000, verbose=False)
+    poly_coeffs = model.polynomial_coefficients(means, stds)
 
-    print(poly_coeffs)
-    print(np.polyfit(data['train'][:,1], data['train'][:,-1], deg=n, full = True))
+    print("model: ", np.flip(poly_coeffs, axis=0))
+    print("polyfit: ",np.polyfit(raw_data[:,0], raw_data[:,1], deg=n))
     
 
     # test the model 
